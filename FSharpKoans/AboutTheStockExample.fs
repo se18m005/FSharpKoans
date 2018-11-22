@@ -57,9 +57,26 @@ module ``about the stock example`` =
     // Feel free to add extra [<Koan>] members here to write
     // tests for yourself along the way. You can also try 
     // using the F# Interactive window to check your progress.
-
+        
+        
+    
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        System.Threading.Thread.CurrentThread.CurrentCulture <-
+            System.Globalization.CultureInfo.InvariantCulture
+            
+        let splitCommas (x:string) =
+            x.Split([|','|])
+            
+        let getAbsDifference (dataLine:string []) =            
+            dataLine.[0], abs(System.Double.Parse(dataLine.[1]) - System.Double.Parse(dataLine.[4]))     
+        
+        let calculateDay (stockData:string List) =
+            stockData.Tail |> List.map splitCommas
+                           |> List.map getAbsDifference
+                           |> List.maxBy snd
+                           |> fst
+        
+        let result =  calculateDay(stockData)
         
         AssertEquality "2012-03-13" result
